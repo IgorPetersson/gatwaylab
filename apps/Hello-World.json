@@ -6,55 +6,23 @@
   "enable_proxy_protocol": false,
   "api_id": "Hello-World",
   "org_id": "1",
-  "use_keyless": true,
-  "use_oauth2": false,
-  "use_openid": false,
-  "openid_options": {
-    "providers": null,
-    "segregate_by_client": false
-  },
-  "oauth_meta": {
-    "allowed_access_types": null,
-    "allowed_authorize_types": null,
-    "auth_login_redirect": ""
-  },
-  "auth": {
-    "use_param": false,
-    "param_name": "",
-    "use_cookie": false,
-    "cookie_name": "",
-    "auth_header_name": "Authorization",
-    "use_certificate": false,
-    "validate_signature": false,
-    "signature": {
-      "algorithm": "",
-      "header": "",
-      "secret": "",
-      "allowed_clock_skew": 0,
-      "error_code": 0,
-      "error_message": ""
+  "use_keyless": false,
+  "auth_configs": {
+    "authToken": {
+      "auth_header_name": "Authorization"
     }
-  },
-  "auth_configs": null,
-  "use_basic_auth": false,
-  "basic_auth": {
-    "disable_caching": false,
-    "cache_ttl": 0,
-    "extract_from_body": false,
-    "body_user_regexp": "",
-    "body_password_regexp": ""
   },
   "use_mutual_tls_auth": false,
   "client_certificates": null,
   "upstream_certificates": null,
   "pinned_public_keys": null,
-  "enable_jwt": false,
+  "enable_jwt": true,
   "use_standard_auth": false,
   "use_go_plugin_auth": false,
   "enable_coprocess_auth": false,
-  "jwt_signing_method": "",
-  "jwt_source": "",
-  "jwt_identity_base_field": "",
+  "jwt_signing_method": "rsa",
+  "jwt_source": "http://http://localhost:14506/realms/jwt/protocol/openid-connect/certs",
+  "jwt_identity_base_field": "sub",
   "jwt_client_base_field": "",
   "jwt_policy_field_name": "",
   "jwt_default_policies": null,
