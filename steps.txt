@@ -1,0 +1,30 @@
+curl -X POST 'https://localhost:14506/realms/jwt/protocol/openid-connect/token' \
+   -H 'Content-Type: application/x-www-form-urlencoded' \
+   --data-urlencode 'client_id=keycloak-jwt' \
+   --data-urlencode 'grant_type=password' \
+   --data-urlencode 'client_secret=KxMvGaVUVkJYYBYfmOUT28uPS0uQirlw' \
+   --data-urlencode 'scope=openid' \
+   --data-urlencode 'username=admin' \
+   --data-urlencode 'password=admin'
+
+
+curl -L --insecure -s -X POST 'http://localhost:14506/realms/jwt/protocol/openid-connect/token' \
+   -H 'Content-Type: application/x-www-form-urlencoded' \
+   --data-urlencode 'client_id=keycloak-jwt' \
+   --data-urlencode 'grant_type=client_credentials' \
+   --data-urlencode 'client_secret=KxMvGaVUVkJYYBYfmOUT28uPS0uQirlw'
+
+curl --request POST \
+  --url 'https://localhost:14506/realms/jwt/protocol/openid-connect/token' \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --data username=richardanchieta \
+  --data password=Admin@123 \
+  --data grant_type=password \
+  --data client_id=gallery_bichosdobrasil
+
+curl \
+  -d "client_id=keycloak-jwt" \
+  -d "username=admin" \
+  -d "password=admin" \
+  -d "grant_type=password" \
+  "https://localhost:14506/realms/jwt/protocol/openid-connect/token"

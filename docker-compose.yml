@@ -1,0 +1,71 @@
+version: '3.3'
+services:
+  tyk-gateway:
+    image: docker.tyk.io/tyk-gateway/tyk-gateway:v5.1.0
+    ports:
+      - 8080:8080
+    networks:
+      - tyk
+    volumes:
+      - ./tyk.standalone.conf:/opt/tyk-gateway/tyk.conf
+      - ./apps:/opt/tyk-gateway/apps
+      - ./middleware:/opt/tyk-gateway/middleware
+      - ./certs:/opt/tyk-gateway/certs
+    environment:
+      - TYK_GW_SECRET=foo
+    depends_on:
+      - tyk-redis
+  tyk-redis:
+    image: redis:6.2.7-alpine
+    networks:
+      - tyk
+    ports:
+      - 6379:6379
+
+  postgres:
+    image: postgis/postgis:13-3.1-alpine
+    restart: always
+    env_file:
+      - postgres.env
+    networks:
+      - tyk
+    ports:
+      - 14501:5432
+    volumes:
+      - tyk_data:/var/lib/postgresql/data
+      - .docker/1_init_db.sh:/docker-entrypoint-initdb.d/1_init_db.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 3s
+      retries: 3
+
+  tyk-keycloak:
+    image: quay.io/keycloak/keycloak:21.1
+    restart: always
+    command: 
+      - "start"
+      - "--spi-theme-static-max-age=-1"
+      - "--spi-theme-cache-themes=false" 
+      - "--spi-theme-cache-templates=false"
+      - "--features=declarative-user-profile"
+    networks:
+      - tyk
+    env_file:
+      - keycloak.env
+    ports:
+      - 14506:8080
+    healthcheck:
+      test: [ "CMD", "curl", "--head" ,"-fsS" ,"http://localhost:8080/health/ready" ]
+      interval: 5s
+      timeout: 2s
+      retries: 2
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+networks:
+  tyk:
+
+volumes:
+  tyk_data:
